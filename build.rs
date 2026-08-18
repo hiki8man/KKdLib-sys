@@ -86,13 +86,19 @@ fn main() {
 		.optimization_opt(ispc::OptimizationOpt::DisableAssertions)
 		.optimization_opt(ispc::OptimizationOpt::FastMath);
 
-	if cfg!(target_arch = "x86_64") {
-		config.target_isas(vec![
-			ispc::TargetISA::SSE2i32x4,
-			ispc::TargetISA::SSE4i32x4,
-			ispc::TargetISA::AVX1i32x8,
-			ispc::TargetISA::AVX2i32x8,
-		]);
+	match std::env::var("CARGO_CFG_TARGET_ARCH").as_deref() {
+		Ok("x86_64" | "x86") => {
+			config.target_isas(vec![
+				ispc::TargetISA::SSE2i32x4,
+				ispc::TargetISA::SSE4i32x4,
+				ispc::TargetISA::AVX1i32x8,
+				ispc::TargetISA::AVX2i32x8,
+			]);
+		}
+		Ok("aarch64" | "arm") => {
+			config.target_isas(vec![ispc::TargetISA::Neoni32x4]);
+		}
+		_ => {}
 	}
 
 	config.compile("bc7e");
