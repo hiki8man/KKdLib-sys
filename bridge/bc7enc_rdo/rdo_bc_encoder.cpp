@@ -28,8 +28,8 @@ rdo_encode_rg (uint8_t *rg, uint32_t width, uint32_t height, DXGI_FORMAT format)
 
 	utils::image_u8 img (width, height);
 	for (uint32_t i = 0; i < width * height; i++) {
-		img.get_pixels ()[i].r = rg[i + 2 + 0];
-		img.get_pixels ()[i].g = rg[i + 2 + 1];
+		img.get_pixels ()[i].r = rg[i * 2 + 0];
+		img.get_pixels ()[i].g = rg[i * 2 + 1];
 	}
 
 	rdo_bc::rdo_bc_encoder encoder;
